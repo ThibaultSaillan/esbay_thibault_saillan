@@ -1,0 +1,64 @@
+version: '3.5'
+
+volumes: 
+  database:
+
+networks: 
+  esbay-network:
+    driver: bridge
+
+services:
+  user:
+    build:
+      context: ./user-ms
+    ports:
+      - 8082:5000
+    depends_on: 
+      - database
+    restart: always
+    networks: 
+      - esbay-network
+  bidding:
+    build:
+      context: ./bidding
+    ports:
+      - 8083:5000
+    depends_on:
+      - database
+    restart: always
+    networks:
+      - esbay-network
+
+  #  user_db:
+#    image: mysql:5.7.22
+#    volumes:
+#      - user-db-data:/var/lib/mysql
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=test
+#      - MYSQL_DATABASE=user
+#    restart: always
+#    networks:
+#      - esbay-network
+
+  product:
+    build:
+      context: ./product-ms
+    ports:
+      - 8081:5000
+    depends_on:
+      - database
+    restart: always
+    networks:
+      - esbay-network
+
+  database:
+    image: mysql:5.7.22
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'test'
+      MYSQL_DATABASE: 'esbay'
+    restart: always
+    networks:
+      - esbay-network
+
