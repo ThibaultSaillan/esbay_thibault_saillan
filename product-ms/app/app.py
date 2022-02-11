@@ -52,23 +52,23 @@ def products():
         data.append(row.to_json())
     response = jsonify({ 'results': data })
     return response
-#
-# @app.route('/api/search', methods=['GET', 'POST'])
-# def search():
-#     name = request.form['name']
-#     products = []
-#
-#     for row in models.Product.query.filter(models.Product.name.like('%' + name + '%')).all():
-#         products.append(row.to_json())
-#     response = jsonify({ 'results': products })
-#     return response
-#
-# #     products_query = models.Product.query
-# #     products = products_query.filter(models.Product.name.like('%' + name + '%'))
-# #     products = products.order_by(models.Product.name).all()
-# #     products = products.to_json
-# #     response = jsonify({ 'results': products })
-# #     return response
+
+@app.route('/api/search', methods=['GET', 'POST'])
+def search():
+    name = request.form['name']
+    products = []
+
+    for row in models.Product.query.filter(models.Product.name.like('%' + name + '%')).all():
+        products.append(row.to_json())
+    response = jsonify({ 'results': products })
+    return response
+
+    products_query = models.Product.query
+    products = products_query.filter(models.Product.name.like('%' + name + '%'))
+    products = products.order_by(models.Product.name).all()
+    products = products.to_json
+    response = jsonify({ 'results': products })
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
